@@ -37,6 +37,7 @@ intsig POPL	'I_POPL'
 intsig JMEM	'I_JMEM'
 intsig JREG	'I_JREG'
 intsig LEAVE	'I_LEAVE'
+intsig LEAL	'I_LEAL'
 
 ##### Symbolic representation of Y86 Registers referenced explicitly #####
 intsig RESP     'REG_ESP'    	# Stack Pointer
@@ -125,15 +126,15 @@ int f_pc = [
 
 # Does fetched instruction require a regid byte?
 bool need_regids =
-	f_icode in { RRMOVL, OPL, IOPL, PUSHL, POPL, IRMOVL, RMMOVL, MRMOVL };
+	f_icode in { RRMOVL, OPL, IOPL, PUSHL, POPL, IRMOVL, RMMOVL, MRMOVL, LEAL};
 
 # Does fetched instruction require a constant word?
 bool need_valC =
-	f_icode in { IRMOVL, RMMOVL, MRMOVL, JXX, CALL, IOPL };
+	f_icode in { IRMOVL, RMMOVL, MRMOVL, JXX, CALL, IOPL, LEAL};
 
 bool instr_valid = f_icode in 
 	{ NOP, HALT, RRMOVL, IRMOVL, RMMOVL, MRMOVL,
-	       OPL, IOPL, JXX, CALL, RET, PUSHL, POPL };
+	       OPL, IOPL, JXX, CALL, RET, PUSHL, POPL, LEAL};
 
 # Predict next value of PC
 int new_F_predPC = [
@@ -154,14 +155,14 @@ int new_E_srcA = [
 
 ## What register should be used as the B source?
 int new_E_srcB = [
-	D_icode in { OPL, IOPL, RMMOVL, MRMOVL } : D_rB;
+	D_icode in { OPL, IOPL, RMMOVL, MRMOVL, LEAL} : D_rB;
 	D_icode in { PUSHL, POPL, CALL, RET } : RESP;
 	1 : RNONE;  # Don't need register
 ];
 
 ## What register should be used as the E destination?
 int new_E_dstE = [
-	D_icode in { RRMOVL, IRMOVL, OPL, IOPL } : D_rB;
+	D_icode in { RRMOVL, IRMOVL, OPL, IOPL, LEAL} : D_rB;
 	D_icode in { PUSHL, POPL, CALL, RET } : RESP;
 	1 : DNONE;  # Don't need register DNONE, not RNONE
 ];
@@ -198,7 +199,7 @@ int new_E_valB = [
 ## Select input A to ALU
 int aluA = [
 	E_icode in { RRMOVL, OPL } : E_valA;
-	E_icode in { IRMOVL, RMMOVL, MRMOVL, IOPL } : E_valC;
+	E_icode in { IRMOVL, RMMOVL, MRMOVL, IOPL, LEAL} : E_valC;
 	E_icode in { CALL, PUSHL } : -4;
 	E_icode in { RET, POPL } : 4;
 	# Other instructions don't need ALU
@@ -207,7 +208,7 @@ int aluA = [
 ## Select input B to ALU
 int aluB = [
 	E_icode in { RMMOVL, MRMOVL, OPL, IOPL, CALL, 
-		      PUSHL, RET, POPL } : E_valB;
+		      PUSHL, RET, POPL, LEAL} : E_valB;
 	E_icode in { RRMOVL, IRMOVL } : 0;
 	# Other instructions don't need ALU
 ];
