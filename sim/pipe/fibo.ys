@@ -1,0 +1,17 @@
+        irmovl  F, %edi         # pointeur
+        mrmovl  (%edi), %eax    # lire u
+        iaddl   4, %edi         # avancer le pointeur
+        mrmovl  (%edi), %ecx    # lire v
+        irmovl  4, %esi         # compteur
+boucle: rrmovl  %ecx, %edx      # t = v
+        addl    %eax, %ecx      # v = u + v
+        rrmovl  %edx, %eax      # u = t
+        iaddl   4, %edi
+        rmmovl  %ecx, (%edi)    # Ã©crire v
+        isubl   1, %esi
+        jne boucle
+        halt
+.pos    0x100
+F:      .long 3
+        .long 5
+

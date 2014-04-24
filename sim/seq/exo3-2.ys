@@ -1,0 +1,26 @@
+
+main:	irmovl stock, %esp
+	irmovl 7,%eax
+	pushl %eax
+	irmovl 5, %eax
+	pushl %eax
+	call sub
+	iaddl 8, %esp
+	rmmovl %eax,res
+	halt
+
+sub:	
+	
+	mrmovl 4(%ebp),%eax
+	mrmovl 8(%ebp),%edx
+	subl %edx,%eax
+	
+	ret
+
+
+res:	.long 0
+
+
+.pos 0x200
+
+stock:	

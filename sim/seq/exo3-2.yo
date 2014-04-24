@@ -1,0 +1,23 @@
+                      | 
+  0x000: 308400020000 | main:	irmovl stock, %esp
+  0x006: 308007000000 | 	irmovl 7,%eax
+  0x00c: a008         | 	pushl %eax
+  0x00e: 308005000000 | 	irmovl 5, %eax
+  0x014: a008         | 	pushl %eax
+  0x016: 8028000000   | 	call sub
+  0x01b: c08408000000 | 	iaddl 8, %esp
+  0x021: 400837000000 | 	rmmovl %eax,res
+  0x027: 10           | 	halt
+                      | 
+  0x028: 500404000000 | sub:	mrmovl 4(%esp),%eax
+  0x02e: 502408000000 | 	mrmovl 8(%esp),%edx
+  0x034: 6120         | 	subl %edx,%eax
+  0x036: 90           | 	ret
+                      | 
+                      | 
+  0x037: 00000000     | res:	.long 0
+                      | 
+                      | 
+  0x200:              | .pos 0x200
+                      | 
+  0x200:              | stock:	

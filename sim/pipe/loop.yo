@@ -1,0 +1,47 @@
+  0x000: 308601000000 |         irmovl 1,%esi
+  0x006: 308702000000 |         irmovl 2,%edi
+  0x00c: 00           |         nop
+  0x00d: 00           |         nop
+  0x00e: 00           |         nop
+  0x00f: 6067         |         addl   %esi,%edi
+                      |         #jmp    l0
+  0x011: 7021000000   |         jmp    l1  # dÃ©commenter pour tester la boucle 1
+                      |         #jmp    l2  # dÃ©commenter pour tester la boucle 2
+                      | 
+  0x016: 00           |         nop
+                      | 
+  0x017: 00           | l0:     nop
+  0x018: 00           |         nop
+  0x019: 00           |         nop
+  0x01a: 00           |         nop
+  0x01b: 00           |         nop
+  0x01c: 7055000000   | 	jmp end
+                      | 
+                      | # boucle 1
+  0x021:              | l1:
+  0x021: 308103000000 |         irmovl 3,%ecx
+  0x027: 00           | loop1:  nop
+  0x028: 00           |         nop
+  0x029: 00           |         nop
+                      | 
+  0x02a: 308001000000 |         irmovl 1,%eax
+  0x030: 6101         |         subl   %eax,%ecx
+  0x032: 7427000000   |         jne    loop1
+                      |         
+  0x037: 10           |         halt
+                      | 
+                      | # boucle 2
+  0x038:              | l2:
+  0x038: 308001000000 |         irmovl 1,%eax
+  0x03e: 308104000000 |         irmovl 4,%ecx
+  0x044: 6101         | loop2:  subl   %eax,%ecx
+  0x046: 7355000000   |         je     end
+  0x04b: 00           |         nop
+  0x04c: 00           |         nop
+  0x04d: 00           |         nop
+  0x04e: 00           |         nop
+  0x04f: 00           |         nop
+                      | 
+  0x050: 7044000000   |         jmp    loop2
+                      | 
+  0x055: 7055000000   | end:    jmp end

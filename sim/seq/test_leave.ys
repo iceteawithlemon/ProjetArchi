@@ -1,0 +1,15 @@
+	irmovl stack, %esp
+	irmovl 4, %ebp
+	call toto
+	halt
+
+toto:
+	pushl %ebp
+	rrmovl %esp, %ebp
+	irmovl 7, %esp
+	leave
+	ret
+
+.pos 0x200
+stack:
+	

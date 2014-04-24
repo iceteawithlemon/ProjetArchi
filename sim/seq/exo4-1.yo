@@ -1,0 +1,58 @@
+                      | 
+  0x000:              | .pos 0
+                      | 
+  0x000: 308400020000 | main:	irmovl stack, %esp
+  0x006: 308049000000 | 	irmovl cell1, %eax
+  0x00c: a008         | 	pushl %eax
+  0x00e: 801a000000   | 	call sum
+  0x013: c08404000000 | 	iaddl 4,%esp
+  0x019: 10           | 	halt
+                      | 
+                      | 
+  0x01a: a058         | sum:	pushl %ebp
+  0x01c: 2045         | 	rrmovl %esp, %ebp
+                      | 
+  0x01e: 308000000000 | 	irmovl 0, %eax
+  0x024: 502508000000 | 	mrmovl 8(%ebp), %edx
+  0x02a:              | debut:
+  0x02a: 6222         | 	andl %edx,%edx
+  0x02c: 7344000000   | 	je fin
+  0x031: 501200000000 | 	mrmovl (%edx),%ecx
+  0x037: 6010         | 	addl %ecx,%eax
+  0x039: 502204000000 | 	mrmovl 4(%edx),%edx
+  0x03f: 702a000000   | 	jmp debut
+                      | 
+  0x044: 2054         | fin:	rrmovl %ebp, %esp
+  0x046: b058         | 	popl %ebp
+  0x048: 90           | 	ret
+                      | 
+                      | 
+                      | 
+                      | 
+  0x049: 01000000     | cell1:	.long 1
+  0x04d: 51000000     | 	.long cell2
+                      | 
+  0x051: 02000000     | cell2:	 .long 2
+  0x055: 59000000     | 	.long cell3
+                      | 
+  0x059: 03000000     | cell3:	.long 3
+  0x05d: 61000000     | 	.long cell4
+                      | 
+  0x061: 04000000     | cell4:	.long 4
+  0x065: 00000000     | 	.long 0
+                      | 
+                      | 	
+                      | 
+  0x069: 0a000000     | cell5:	.long 10
+  0x06d: 71000000     | 	.long cell6
+                      | 
+  0x071: 0b000000     | cell6:	.long 11
+  0x075: 79000000     | 	.long cell7
+                      | 
+  0x079: 0c000000     | cell7:	.long 12
+  0x07d: 00000000     | 	.long 0
+                      | 
+                      | 
+                      | 	
+  0x200:              | .pos 0x200
+  0x200:              | stack:	

@@ -1,0 +1,16 @@
+	irmovl a, %eax
+	jmem 8(%eax)
+	
+	irmovl 4, %ebx
+	nop
+	nop
+	
+toto:
+	halt
+	
+a:
+	.long 2
+b:
+	.long 3
+c:
+	.long toto

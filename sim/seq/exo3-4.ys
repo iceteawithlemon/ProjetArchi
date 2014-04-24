@@ -1,0 +1,50 @@
+
+main:	irmovl stock, %esp
+	irmovl 2,%eax
+	pushl %eax
+	call g
+	iaddl 4, %esp
+	rmmovl %eax,res
+	halt
+
+sub:	pushl %ebp
+	rrmovl %esp, %ebp
+	
+	mrmovl 8(%ebp),%edx
+	mrmovl 20(%ebp),%eax
+	subl %edx,%eax
+
+	rrmovl %ebp,%esp
+	popl  %ebp
+	
+	ret
+
+
+g:	pushl %ebp
+	rrmovl %esp, %ebp
+
+	irmovl 2,%eax
+	pushl %eax
+	call sub
+	rmmovl %eax,a
+	iaddl 4,%esp
+	irmovl 1,%eax
+	pushl %eax
+	call sub
+	iaddl 4,%esp
+	mrmovl a,%edx
+	addl %edx, %eax
+	
+	rrmovl %ebp,%esp
+	popl  %ebp
+	
+	ret
+
+	
+
+res:	.long 0
+a:	.long 0
+
+.pos 0x200
+
+stock:	

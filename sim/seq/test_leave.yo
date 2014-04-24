@@ -1,0 +1,15 @@
+  0x000: 308400020000 | 	irmovl stack, %esp
+  0x006: 308504000000 | 	irmovl 4, %ebp
+  0x00c: 8012000000   | 	call toto
+  0x011: 10           | 	halt
+                      | 
+  0x012:              | toto:
+  0x012: a058         | 	pushl %ebp
+  0x014: 2045         | 	rrmovl %esp, %ebp
+  0x016: 308407000000 | 	irmovl 7, %esp
+  0x01c: d0           | 	leave
+  0x01d: 90           | 	ret
+                      | 
+  0x200:              | .pos 0x200
+  0x200:              | stack:
+                      | 	

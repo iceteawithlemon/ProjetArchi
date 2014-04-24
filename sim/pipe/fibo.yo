@@ -1,0 +1,17 @@
+  0x000: 308700010000 |         irmovl  F, %edi         # pointeur
+  0x006: 500700000000 |         mrmovl  (%edi), %eax    # lire u
+  0x00c: c08704000000 |         iaddl   4, %edi         # avancer le pointeur
+  0x012: 501700000000 |         mrmovl  (%edi), %ecx    # lire v
+  0x018: 308604000000 |         irmovl  4, %esi         # compteur
+  0x01e: 2012         | boucle: rrmovl  %ecx, %edx      # t = v
+  0x020: 6001         |         addl    %eax, %ecx      # v = u + v
+  0x022: 2020         |         rrmovl  %edx, %eax      # u = t
+  0x024: c08704000000 |         iaddl   4, %edi
+  0x02a: 401700000000 |         rmmovl  %ecx, (%edi)    # Ã©crire v
+  0x030: c18601000000 |         isubl   1, %esi
+  0x036: 741e000000   |         jne boucle
+  0x03b: 10           |         halt
+  0x100:              | .pos    0x100
+  0x100: 03000000     | F:      .long 3
+  0x104: 05000000     |         .long 5
+                      | 

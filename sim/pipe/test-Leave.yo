@@ -1,0 +1,11 @@
+  0x000: 308400020000 | 	irmovl stack, %esp
+  0x006: 308504000000 | 	irmovl 4, %ebp
+  0x00c: a058         | 	pushl %ebp
+  0x00e: 2045         | 	rrmovl %esp, %ebp
+  0x010: 308407000000 | 	irmovl 7, %esp
+  0x016: d0           | 	leave
+  0x017: 10           | 	halt
+                      | 
+  0x200:              | .pos 0x200
+  0x200:              | stack:
+                      | 	

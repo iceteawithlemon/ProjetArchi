@@ -1,0 +1,32 @@
+.pos0
+
+mrmovl a, %eax
+mrmovl b, %ecx
+mrmovl n, %edx
+mrmovl i, %ebx
+
+
+
+VRAI:
+	subl %edx,%ebx
+	jmp FIN
+	
+	addl %eax, %ecx
+	rmmovl %eax, c
+	rrmovl %ecx, %eax
+	mrmovl c, %ecx
+	iaddl 1,%ebx
+	rmmovl %ebx,i
+	jmp VRAI
+	
+FIN				;
+
+
+
+
+
+
+a: .long 1
+b: .long 1
+n: .long 12
+i: .long 2

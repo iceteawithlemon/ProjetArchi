@@ -1,0 +1,26 @@
+.pos 0
+mrmovl a, %eax
+mrmovl b, %ecx
+addl %eax, %ecx
+rrmovl %ecx, %edx
+
+irmovl 5,%eax
+irmovl 22, %ecx
+subl %eax,%ecx
+rrmovl %ecx, %ebx
+
+irmovl 0,%eax
+irmovl 0, %ecx
+andl %eax,%ecx
+rrmovl %ecx, %ebx
+
+
+irmovl 5,%eax
+irmovl 22, %ecx
+xorl %eax,%ecx
+rrmovl %ecx, %ebx
+
+
+halt
+a: .long 5
+b: .long 22

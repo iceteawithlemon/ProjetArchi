@@ -1,0 +1,31 @@
+
+	irmovl stock, %esp
+	
+	mrmovl c, %eax
+	mrmovl b, %edx
+	subl %edx, %eax
+	pushl %eax
+	
+	mrmovl d, %eax
+	mrmovl c,%edx
+	subl %edx, %eax
+	popl %edx
+	andl %edx, %eax
+	pushl %eax
+	
+	mrmovl b,%eax
+	mrmovl a,%edx
+	subl %edx, %eax
+	popl %edx
+	addl %eax, %edx
+	
+	halt
+
+a:	.long 6
+b:	.long 5
+c:	.long 3
+d:	.long 2
+
+.pos 0x200
+stock:	
+	

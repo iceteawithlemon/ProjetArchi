@@ -1,0 +1,48 @@
+main:	irmovl stack, %esp
+	mrmovl n, %eax
+	pushl %eax
+	call f
+	iaddl 4,%esp
+	halt
+
+f:	
+	irmovl 0, %eax
+	pushl %eax
+	call g
+	iaddl 4, %esp
+	ret
+
+
+g:	
+	pushl %ebp
+	rrmovl %esp, %ebp
+
+	mrmovl 16(%ebp), %eax
+
+
+	andl %eax, %eax
+	jne else
+		mrmovl 8(%esp),%edx
+		jmp fin
+	
+else:	
+	pushl %eax
+	isubl 1, %eax
+	pushl %eax
+	
+	jmp  g
+	
+	iaddl 4, %esp
+	popl %edx
+	addl %edx, %eax
+	
+fin:	
+	rrmovl %ebp,%esp
+	popl %ebp
+	ret
+
+	
+n:	.long 10
+
+.pos 0x200
+stack:

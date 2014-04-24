@@ -1,0 +1,7 @@
+  0x000: 308010000000 | 	irmovl toto, %eax
+  0x006: e008         | 	jreg %eax
+  0x008: 308302000000 | 	irmovl 2, %ebx
+  0x00e: 00           | 	nop
+  0x00f: 00           | 	nop
+  0x010:              | toto:
+  0x010: 10           | 	halt

@@ -1,0 +1,50 @@
+                      | 
+  0x000: 308400020000 | main:	irmovl stock, %esp
+  0x006: 308002000000 | 	irmovl 2,%eax
+  0x00c: a008         | 	pushl %eax
+  0x00e: 8037000000   | 	call g
+  0x013: c08404000000 | 	iaddl 4, %esp
+  0x019: 400874000000 | 	rmmovl %eax,res
+  0x01f: 10           | 	halt
+                      | 
+  0x020: a058         | sub:	pushl %ebp
+  0x022: 2045         | 	rrmovl %esp, %ebp
+                      | 	
+  0x024: 502508000000 | 	mrmovl 8(%ebp),%edx
+  0x02a: 500514000000 | 	mrmovl 20(%ebp),%eax
+  0x030: 6120         | 	subl %edx,%eax
+                      | 
+  0x032: 2054         | 	rrmovl %ebp,%esp
+  0x034: b058         | 	popl  %ebp
+                      | 	
+  0x036: 90           | 	ret
+                      | 
+                      | 
+  0x037: a058         | g:	pushl %ebp
+  0x039: 2045         | 	rrmovl %esp, %ebp
+                      | 
+  0x03b: 308002000000 | 	irmovl 2,%eax
+  0x041: a008         | 	pushl %eax
+  0x043: 8020000000   | 	call sub
+  0x048: 400878000000 | 	rmmovl %eax,a
+  0x04e: c08404000000 | 	iaddl 4,%esp
+  0x054: 308001000000 | 	irmovl 1,%eax
+  0x05a: a008         | 	pushl %eax
+  0x05c: 8020000000   | 	call sub
+  0x061: c08404000000 | 	iaddl 4,%esp
+  0x067: 502878000000 | 	mrmovl a,%edx
+  0x06d: 6020         | 	addl %edx, %eax
+                      | 	
+  0x06f: 2054         | 	rrmovl %ebp,%esp
+  0x071: b058         | 	popl  %ebp
+                      | 	
+  0x073: 90           | 	ret
+                      | 
+                      | 	
+                      | 
+  0x074: 00000000     | res:	.long 0
+  0x078: 00000000     | a:	.long 0
+                      | 
+  0x200:              | .pos 0x200
+                      | 
+  0x200:              | stock:	

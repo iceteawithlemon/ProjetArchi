@@ -1,0 +1,58 @@
+
+.pos 0
+
+main:	irmovl stack, %esp
+	irmovl cell1, %eax	#addresse de cell1
+	pushl %eax
+	call sum		#appel fonction sum
+	iaddl 4,%esp
+	halt
+
+
+sum:	pushl %ebp		#cadre de pile
+	rrmovl %esp, %ebp
+
+	irmovl 0, %eax
+	mrmovl 8(%ebp), %edx	#on prend cell1
+debut:
+	andl %edx,%edx		#on regarde si edx a 0
+	je fin			#si edx a 0 alors -> fin
+	mrmovl (%edx),%ecx	#prend contenu de edx
+	addl %ecx,%eax		#addition
+	mrmovl 4(%edx),%edx	#passe a cell2
+	jmp debut
+
+fin:	rrmovl %ebp, %esp	#cadre de pile
+	popl %ebp
+	ret
+
+
+
+
+cell1:	.long 1
+	.long cell2
+
+cell2:	 .long 2
+	.long cell3
+
+cell3:	.long 3
+	.long cell4
+
+cell4:	.long 4
+	.long 0
+
+	
+
+cell5:	.long 10
+	.long cell6
+
+cell6:	.long 11
+	.long cell7
+
+cell7:	.long 12
+	.long 0
+
+
+	
+.pos 0x200
+stack:	

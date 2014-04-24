@@ -1,0 +1,34 @@
+
+
+	mrmovl n, %ecx
+	irmovl 1, %eax
+	irmovl 1, %ebx
+	mrmovl i, %ebp
+debut:  
+	rrmovl %ebx, %edx
+	
+	rmmovl %edx, t(%ebp)
+	mrmovl t(%ebp), %esi
+	iaddl 4, %ebp
+	rmmovl %ebp, i
+	
+	addl %eax, %ebx
+	rrmovl %edx, %eax
+
+	isubl 63, %edx
+	jge fin
+	
+	isubl 1, %ecx
+	jge debut
+	rmmovl %ebx, res
+	halt
+
+fin:	 halt
+	
+res:	.long 0
+i:	.long 0
+.align 4
+n:	.long 15	
+
+.pos 100
+t:	

@@ -1,0 +1,37 @@
+  0x000: 308400020000 | main:	irmovl stack, %esp
+  0x006: 500854000000 | 	mrmovl n, %eax
+  0x00c: a008         | 	pushl %eax
+  0x00e: 801a000000   | 	call f
+  0x013: c08404000000 | 	iaddl 4,%esp
+  0x019: 10           | 	halt
+                      | 
+                      | 	
+  0x01a: a058         | f:	pushl %ebp
+  0x01c: 2045         | 	rrmovl %esp, %ebp
+                      | 
+  0x01e: 500508000000 | 	mrmovl 8(%ebp), %eax
+                      | 
+  0x024: 6200         | 	andl %eax, %eax
+  0x026: 7436000000   | 	jne else
+  0x02b: 308000000000 | 		irmovl 0, %eax
+  0x031: 704f000000   | 		jmp fin
+  0x036:              | else:	
+  0x036: a008         | 		pushl %eax
+  0x038: c18001000000 | 		isubl 1, %eax
+  0x03e: a008         | 		pushl %eax
+  0x040: 801a000000   | 		call f
+  0x045: c08404000000 | 		iaddl 4, %esp
+  0x04b: b028         | 		popl %edx
+  0x04d: 6020         | 		addl %edx, %eax
+  0x04f:              | fin:	
+  0x04f: 2054         | 	rrmovl %ebp,%esp
+  0x051: b058         | 	popl %ebp
+  0x053: 90           | 	ret
+                      | 
+                      | 	
+  0x054: 0a000000     | n:	.long 10
+                      | 
+  0x200:              | .pos 0x200
+  0x200:              | stack:	
+                      | 
+                      | 

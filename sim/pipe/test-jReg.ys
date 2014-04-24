@@ -1,0 +1,7 @@
+	irmovl toto, %eax
+	jreg %eax
+	irmovl 2, %ebx
+	nop
+	nop
+toto:
+	halt
