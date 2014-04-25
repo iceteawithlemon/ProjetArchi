@@ -1,7 +1,0 @@
-.pos 0x00
-	irmovl 1,%ebx
-	irmovl 2, %eax
-	leal depl(%ebx), %eax
-
-	
-depl:	.long 2
