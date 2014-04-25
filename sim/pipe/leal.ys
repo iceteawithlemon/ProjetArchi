@@ -1,10 +1,7 @@
 .pos 0x00
 	irmovl 0,%eax
-	irmovl 0x100,%ebx
+	irmovl 1,%ebx
 	leal 4(%ebx),%eax
 	halt
 
-.pos 0x100
-	.long 1
-.pos 0x104
-	.long 2
+

@@ -161,6 +161,7 @@ int new_E_srcA = [
 ## What register should be used as the B source?
 int new_E_srcB = [
 	D_icode in { OPL, IOPL, RMMOVL, MRMOVL , JMEM } : D_rB;
+	D_icode == IRMOVL && D_ifun == 1 : D_rB;
 	D_icode in { PUSHL, POPL, CALL, RET } : RESP;
 	D_icode in {LEAVE} : REBP		    ;
 	1 : RNONE;  # Don't need register
@@ -169,7 +170,8 @@ int new_E_srcB = [
 ## What register should be used as the E destination?
 int new_E_dstE = [
 	D_icode == IRMOVL && D_ifun == 1 : D_rA;
-	D_icode in { RRMOVL, IRMOVL, OPL, IOPL} : D_rB;
+	D_icode == IRMOVL && D_ifun == 0 : D_rB;
+	D_icode in { RRMOVL, OPL, IOPL} : D_rB;
 	D_icode in { PUSHL, POPL, CALL, RET, LEAVE } : RESP;
 	1 : DNONE;  # Don't need register DNONE, not RNONE
 ];
@@ -216,9 +218,10 @@ int aluA = [
 ## Select input B to ALU
 int aluB = [
 	E_icode == IRMOVL && E_ifun == 1 : E_valB;
+	E_icode == IRMOVL && E_ifun == 0 : 0;
 	E_icode in { RMMOVL, MRMOVL, OPL, IOPL, CALL, 
 		      PUSHL, RET, POPL , JMEM, LEAVE} : E_valB;
-	E_icode in { RRMOVL, IRMOVL } : 0;
+	E_icode in { RRMOVL} : 0;
 	# Other instructions don't need ALU
 ];
 

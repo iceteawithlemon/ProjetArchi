@@ -112,7 +112,7 @@ int srcB = [
 
 ## What register should be used as the E destination?
 int dstE = [
-	icode in { RRMOVL, IRMOVL, OPL, IOPL } : rB;
+	icode in { RRMOVL, OPL, IOPL } : rB;
 	icode == IRMOVL && ifun == 0 : rB;
 	icode == IRMOVL && ifun == 1 : rA;
 	icode in { PUSHL, POPL, CALL, RET, LEAVE } : RESP;
@@ -142,7 +142,7 @@ int aluB = [
 	icode == IRMOVL && ifun == 1 : valB;
 	icode == IRMOVL && ifun == 0 : 0;
 	icode in { RMMOVL, MRMOVL, OPL, IOPL, CALL, PUSHL, RET, POPL, JMEM, LEAVE } : valB;
-	icode in { RRMOVL, IRMOVL } : 0;
+	icode in { RRMOVL} : 0;
 	# Other instructions don't need ALU
 ];
 
