@@ -111,7 +111,7 @@ int srcB = [
 
 ## What register should be used as the E destination?
 int dstE = [
-	icode in { RRMOVL, IRMOVL, OPL, IOPL,LEAL } : rB;
+	icode in { RRMOVL, IRMOVL, OPL, IOPL, LEAL } : rB;
 	icode in { PUSHL, POPL, CALL, RET, LEAVE } : RESP;
 	1 : RNONE;  # Don't need register
 ];
@@ -153,7 +153,7 @@ bool set_cc = icode in { OPL, IOPL };
 ################ Memory Stage    ###################################
 
 ## Set read control signal
-bool mem_read = icode in { MRMOVL, POPL, RET, JMEM, LEAVE};
+bool mem_read = icode in { MRMOVL, POPL, RET, JMEM, LEAVE };
 
 ## Set write control signal
 bool mem_write = icode in { RMMOVL, PUSHL, CALL };

@@ -1,8 +1,8 @@
 /* Grammar for Y86 Assembler */
  #include "yas.h"
- unsigned int atoh(const char *);
+ int atoh(char *);
 
-Instr         rrmovl|rmmovl|mrmovl|irmovl|addl|subl|andl|xorl|sall|sarl|jmp|jle|jl|je|jne|jge|jg|call|ret|pushl|popl|"."byte|"."word|"."long|"."pos|"."align|halt|nop|iaddl|isubl|iandl|ixorl|isall|isarl|leave|jreg|jmem|leal|
+Instr         rrmovl|rmmovl|mrmovl|irmovl|addl|subl|andl|xorl|jmp|jle|jl|je|jne|jge|jg|call|ret|pushl|popl|"."byte|"."word|"."long|"."pos|"."align|halt|nop|iaddl|leave|leal
 Letter        [a-zA-Z]
 Digit         [0-9]
 Ident         {Letter}({Letter}|{Digit}|_)*
@@ -28,13 +28,13 @@ Reg           %eax|%ecx|%edx|%ebx|%esi|%edi|%esp|%ebp
 {Reg}             add_reg(yytext);
 [-]?{Digit}+      add_num(atoi(yytext));
 "0"[xX]{Hex}+     add_num(atoh(yytext));
-[():,]            add_punct(*yytext);
+[():,]             add_punct(*yytext);
 {Ident}           add_ident(yytext);
 {Char}            {; BEGIN ERR;}
 <ERR>{Char}*{Newline} {fail("Invalid line"); lineno++; BEGIN 0;}
 %%
 
-unsigned int atoh(const char *s)
+int atoh(char *s)
 {
-    return(strtoul(s, NULL, 16));
+  return(strtol(s, NULL, 16));
 }
