@@ -52,7 +52,7 @@ instr_t instruction_set[] =
     {"rrmovl", HPACK(I_RRMOVL, 0), 2, R_ARG, 1, 1, R_ARG, 1, 0 },
     /* arg1hi indicates number of bytes */
     {"irmovl", HPACK(I_IRMOVL, 0), 6, I_ARG, 2, 4, R_ARG, 1, 0 },
-    {"leal", HPACK(I_LEAL, 1), 6, M_ARG, 2, 4, R_ARG, 1, 0 },
+    {"leal", HPACK(I_IRMOVL, 1), 6, M_ARG, 1, 0, R_ARG, 1, 1 },
 
     {"rmmovl", HPACK(I_RMMOVL, 0), 6, R_ARG, 1, 1, M_ARG, 1, 0 },
     {"mrmovl", HPACK(I_MRMOVL, 0), 6, M_ARG, 1, 0, R_ARG, 1, 1 },
@@ -660,7 +660,7 @@ exc_t step_state(state_ptr s, FILE *error_file)
     need_regids =
 	(hi0 == I_RRMOVL || hi0 == I_ALU || hi0 == I_PUSHL ||
 	 hi0 == I_POPL || hi0 == I_IRMOVL || hi0 == I_RMMOVL ||
-	 hi0 == I_MRMOVL || hi0 == I_ALUI || hi0 == I_LEAL);
+	 hi0 == I_MRMOVL || hi0 == I_ALUI );
 
     if (need_regids) {
 	ok1 = get_byte_val(s->m, ftpc, &byte1);
@@ -670,7 +670,7 @@ exc_t step_state(state_ptr s, FILE *error_file)
     }
 
     need_imm =
-	(hi0 == I_IRMOVL || hi0 == I_LEAL || hi0 == I_RMMOVL || hi0 == I_MRMOVL ||
+	(hi0 == I_IRMOVL || hi0 == I_RMMOVL || hi0 == I_MRMOVL ||
 	 hi0 == I_JXX || hi0 == I_CALL || hi0 == I_ALUI);
 
     if (need_imm) {
@@ -736,38 +736,8 @@ exc_t step_state(state_ptr s, FILE *error_file)
 	set_reg_val(s->r, lo1, cval);
 	s->pc = ftpc;
 	break;
-     case I_LEAL:
-	if (!ok1) {
-	    if (error_file)
-		fprintf(error_file,
-			"PC = 0x%x, Invalid instruction address\n", s->pc);
-	    return EXC_ADDR;
-	}
-	if (!okc) {
-	    if (error_file)
-		fprintf(error_file,
-			"PC = 0x%x, Invalid instruction address",
-			s->pc);
-	    return EXC_INSTR;
-	}
-	if (lo1 >= 8) {
-	    if (error_file)
-		fprintf(error_file,
-			"PC = 0x%x, Invalid register ID 0x%.1x\n",
-			s->pc, lo1);
-	    return EXC_INSTR;
-	}
-	//set_reg_val(s->r, lo1, cval);
-	//s->pc = ftpc;
-
-	if (lo1 < 8) 
-	    cval += get_reg_val(s->r, lo1);
-	if (!get_word_val(s->m, cval, &val))
-	    return EXC_ADDR;
-	set_reg_val(s->r, hi1, val);
-	s->pc = ftpc;
-
-	break;
+     
+	
 
     case I_RMMOVL:
 	if (!ok1) {
