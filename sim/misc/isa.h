@@ -24,7 +24,7 @@ typedef enum { R_ARG, M_ARG, I_ARG, NO_ARG } arg_t;
  * On peut réorganiser et simplifier cette liste
  * mais il faut alors recompiler tous les fichiers yo
  */
-typedef enum { I_NOP, I_HALT, I_RRMOVL, I_IRMOVL, I_RMMOVL, I_MRMOVL,I_LEAL,
+typedef enum { I_NOP, I_HALT, I_RRMOVL, I_IRMOVL, I_RMMOVL, I_MRMOVL,
 	       I_ALU, I_JXX, I_CALL, I_RET, I_PUSHL, I_POPL,
 	       I_ALUI, I_LEAVE, I_JREG, I_JMEM, I_POP2 } itype_t;
 
