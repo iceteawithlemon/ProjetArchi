@@ -4,6 +4,7 @@
 	leal 4(%ebx),%eax
 	halt
 
+.pos 0x100
 dept:
 	.long 1
 	.long 2

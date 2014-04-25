@@ -38,7 +38,7 @@ intsig POPL	'I_POPL'
 intsig JMEM	'I_JMEM'
 intsig JREG	'I_JREG'
 intsig LEAVE	'I_LEAVE'
-intsig LEAL	'I_LEAL'
+
 
 ##### Symbolic representation of Y86 Registers referenced explicitly #####
 intsig RESP     'REG_ESP'    	# Stack Pointer
@@ -81,15 +81,15 @@ intsig valM	'valm'			# Value read from memory
 
 # Does fetched instruction require a regid byte?
 bool need_regids =
-	icode in { RRMOVL, OPL, IOPL, PUSHL, POPL, IRMOVL, RMMOVL, MRMOVL, JREG, JMEM, LEAL};
+	icode in { RRMOVL, OPL, IOPL, PUSHL, POPL, IRMOVL, RMMOVL, MRMOVL, JREG, JMEM };
 
 # Does fetched instruction require a constant word?
 bool need_valC =
-	icode in { IRMOVL, RMMOVL, MRMOVL, JXX, CALL, IOPL,JMEM, LEAL };
+	icode in { IRMOVL, RMMOVL, MRMOVL, JXX, CALL, IOPL,JMEM };
 
 bool instr_valid = icode in 
 	{ NOP, HALT, RRMOVL, IRMOVL, RMMOVL, MRMOVL,
-	       OPL, IOPL, JXX, CALL, RET, PUSHL, POPL, JREG, JMEM,LEAL, LEAVE};
+	       OPL, IOPL, JXX, CALL, RET, PUSHL, POPL, JREG, JMEM, LEAVE};
 
 ################ Decode Stage    ###################################
 
@@ -104,6 +104,7 @@ int srcA = [
 ## What register should be used as the B source?
 int srcB = [
 	icode in { OPL, IOPL, RMMOVL, MRMOVL, JMEM } : rB;
+	icode == IRMOVL && ifun == 1 : rB;
 	icode in { PUSHL, POPL, CALL, RET } : RESP;
 	icode in { LEAVE } : REBP;
 	1 : RNONE;  # Don't need register
@@ -111,7 +112,9 @@ int srcB = [
 
 ## What register should be used as the E destination?
 int dstE = [
-	icode in { RRMOVL, IRMOVL, OPL, IOPL, LEAL } : rB;
+	icode in { RRMOVL, IRMOVL, OPL, IOPL } : rB;
+	icode == IRMOVL && ifun == 0 : rB;
+	icode == IRMOVL && ifun == 1 : rA;
 	icode in { PUSHL, POPL, CALL, RET, LEAVE } : RESP;
 	1 : RNONE;  # Don't need register
 ];
@@ -128,7 +131,7 @@ int dstM = [
 ## Select input A to ALU
 int aluA = [
 	icode in { RRMOVL, OPL } : valA;
-	icode in { IRMOVL, RMMOVL, MRMOVL, IOPL, JMEM, LEAL } : valC;
+	icode in { IRMOVL, RMMOVL, MRMOVL, IOPL, JMEM } : valC;
 	icode in { CALL, PUSHL } : -4;
 	icode in { RET, POPL, LEAVE } : 4;
 	# Other instructions don't need ALU
@@ -136,8 +139,10 @@ int aluA = [
 
 ## Select input B to ALU
 int aluB = [
+	icode == IRMOVL && ifun == 1 : valB;
+	icode == IRMOVL && ifun == 0 : 0;
 	icode in { RMMOVL, MRMOVL, OPL, IOPL, CALL, PUSHL, RET, POPL, JMEM, LEAVE } : valB;
-	icode in { RRMOVL, IRMOVL, LEAL } : 0;
+	icode in { RRMOVL, IRMOVL } : 0;
 	# Other instructions don't need ALU
 ];
 

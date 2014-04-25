@@ -37,7 +37,7 @@ intsig POPL	'I_POPL'
 intsig JMEM	'I_JMEM'
 intsig JREG	'I_JREG'
 intsig LEAVE	'I_LEAVE'
-intsig LEAL	'I_LEAL'
+
 
 ##### Symbolic representation of Y86 Registers referenced explicitly #####
 intsig RESP     'REG_ESP'    	# Stack Pointer
@@ -130,15 +130,15 @@ int f_pc = [
 
 # Does fetched instruction require a regid byte?
 bool need_regids =
-	f_icode in { RRMOVL, OPL, IOPL, PUSHL, POPL, IRMOVL, RMMOVL, MRMOVL, JREG, JMEM ,LEAL } ;
+	f_icode in { RRMOVL, OPL, IOPL, PUSHL, POPL, IRMOVL, RMMOVL, MRMOVL, JREG, JMEM } ;
 
 # Does fetched instruction require a constant word?
 bool need_valC =
-	f_icode in { IRMOVL, RMMOVL, MRMOVL, JXX, CALL, IOPL, JMEM, LEAL  };
+	f_icode in { IRMOVL, RMMOVL, MRMOVL, JXX, CALL, IOPL, JMEM };
 
 bool instr_valid = f_icode in 
 	{ NOP, HALT, RRMOVL, IRMOVL, RMMOVL, MRMOVL,
-	       OPL, IOPL, JXX, CALL, RET, PUSHL, POPL, JREG, JMEM , LEAVE,LEAL};
+	       OPL, IOPL, JXX, CALL, RET, PUSHL, POPL, JREG, JMEM , LEAVE };
 
 # Predict next value of PC
 int new_F_predPC = [
@@ -168,6 +168,7 @@ int new_E_srcB = [
 
 ## What register should be used as the E destination?
 int new_E_dstE = [
+	D_icode == IRMOVL && D_ifun == 1 : D_rA;
 	D_icode in { RRMOVL, IRMOVL, OPL, IOPL,LEAL } : D_rB;
 	D_icode in { PUSHL, POPL, CALL, RET, LEAVE } : RESP;
 	1 : DNONE;  # Don't need register DNONE, not RNONE
@@ -214,6 +215,7 @@ int aluA = [
 
 ## Select input B to ALU
 int aluB = [
+	E_icode == IRMOVL && E_ifun == 1 : E_valB;
 	E_icode in { RMMOVL, MRMOVL, OPL, IOPL, CALL, 
 		      PUSHL, RET, POPL , JMEM, LEAVE} : E_valB;
 	E_icode in { RRMOVL, IRMOVL, LEAL } : 0;
