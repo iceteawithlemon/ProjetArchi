@@ -52,7 +52,7 @@ instr_t instruction_set[] =
     {"rrmovl", HPACK(I_RRMOVL, 0), 2, R_ARG, 1, 1, R_ARG, 1, 0 },
     /* arg1hi indicates number of bytes */
     {"irmovl", HPACK(I_IRMOVL, 0), 6, I_ARG, 2, 4, R_ARG, 1, 0 },
-    {"leal", HPACK(I_LEAL, 1), 6, I_ARG, 2, 4, R_ARG, 1, 0 },
+    {"leal", HPACK(I_LEAL, 1), 6, M_ARG, 2, 4, R_ARG, 1, 0 },
 
     {"rmmovl", HPACK(I_RMMOVL, 0), 6, R_ARG, 1, 1, M_ARG, 1, 0 },
     {"mrmovl", HPACK(I_MRMOVL, 0), 6, M_ARG, 1, 0, R_ARG, 1, 1 },
