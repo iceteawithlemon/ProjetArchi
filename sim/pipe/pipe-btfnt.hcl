@@ -120,7 +120,10 @@ intsig W_valM  'mem_wb_curr->valm'	# Memory M value
 ## What address should instruction be fetched at
 int f_pc = [
 	# Mispredicted branch.  Fetch at incremented PC
-	M_icode == IJXX && !M_Bch : M_valA;
+	# cas où le backwards branch a été prise et est incorrect
+	M_icode == IJXX && M_ifun != JUNCOND && M_valA > M_valB && !M_Bch : M_valA
+	# cas où le forwards branch a été prise et est incorrect
+	M_icode == IJXX && M_Bch && M_ifun != JUNCOND && M_valA <= M_valE : M_valE;
 	# Completion of RET instruction.
 	W_icode == IRET : W_valM;
 	# Default: Use predicted value of PC
@@ -143,7 +146,12 @@ bool instr_valid = f_icode in
 # Predict next value of PC
 int new_F_predPC = [
 	# BBTFNT: This is where you'll change the branch prediction rule
-	f_icode in { IJXX, ICALL } : f_valC;
+	f_icode in { ICALL } : f_valC;
+	# cas branchement inconditionnel
+	f_icode in { IJXX }  && f_ifun == JUNCOND: f_valC;
+	# cas branchement backwards
+	f_icode == IJXX && f_valP > f_valC: f_valC
+	# cas branchement forwards & tous les autres
 	1 : f_valP;
 ];
 
@@ -211,6 +219,8 @@ int aluA = [
 	E_icode in { IIRMOVL, IRMMOVL, IMRMOVL } : E_valC;
 	E_icode in { ICALL, IPUSHL } : -4;
 	E_icode in { IRET, IPOPL } : 4;
+	# comme avec le branchement jamais, on fait passer val_C dans l'UAL
+	E_icode == IJXX: E_valC;
 	# Other instructions don't need ALU
 ];
 
@@ -218,7 +228,9 @@ int aluA = [
 int aluB = [
 	E_icode in { IRMMOVL, IMRMOVL, IOPL, ICALL, 
 		      IPUSHL, IRET, IPOPL } : E_valB;
-	E_icode in { IRRMOVL, IIRMOVL } : 0;
+	E_icode in { IRRMOVL, IIRMOVL} : 0;
+	# on ajoute zero pour ne pas modifier la valeur de val_C
+	E_icode == IJXX: 0;
 	# Other instructions don't need ALU
 ];
 
@@ -269,7 +281,9 @@ bool D_stall =
 
 bool D_bubble =
 	# Mispredicted branch
-	(E_icode == IJXX && !e_Bch) ||
+	# le branchement étant considéré correct sous d'autres conditions qu'avant, on change les tests suivants
+	(E_icode == IJXX && E_ifun != JUNCOND &&
+          (E_valA > E_valA && !e_Bch || E_valA <= E_valC && e_Bch)) ||
 	# BBTFNT: This condition will change
 	# Stalling at fetch while ret passes through pipeline
 	# but not condition for a load/use hazard
@@ -281,7 +295,9 @@ bool D_bubble =
 bool E_stall = 0;
 bool E_bubble =
 	# Mispredicted branch
-	(E_icode == IJXX && !e_Bch) ||
+	# on change le test ici aussi
+	(E_icode == IJXX && E_ifun != JUNCOND &&
+          (E_valA > E_valA && !e_Bch || E_valA <= E_valC && e_Bch)) ||
 	# BBTFNT: This condition will change
 	# Conditions for a load/use hazard
 	E_icode in { IMRMOVL, IPOPL } &&
