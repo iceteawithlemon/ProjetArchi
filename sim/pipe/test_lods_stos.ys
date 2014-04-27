@@ -1,0 +1,9 @@
+.pos 0x00
+	irmovl 1, %esi
+	lods
+	stos
+	halt
+	
+	
+	
+
