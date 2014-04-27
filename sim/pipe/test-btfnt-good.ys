@@ -1,0 +1,29 @@
+# fonction qui multiple deux entiers a et b, et stocke le résultat en mémoire
+# version où BTFNT fonctionne efficacement
+
+.pos 0x00
+	mrmovl a, %eax
+	irmovl 0, %ebx
+	mrmovl b, %ecx
+	nop
+	nop
+	nop
+	
+loop:	addl %eax, %ebx
+	isubl 1, %ecx
+	nop
+	nop
+	jg loop
+	rmmovl %ebx, resultat
+	nop
+	nop
+	nop
+	halt
+
+	
+
+a:	.long 3
+b:	.long 5
+	
+resultat:	.long 0
+	
