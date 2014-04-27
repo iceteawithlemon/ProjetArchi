@@ -1357,10 +1357,10 @@ void do_if_stage()
        and immediate word
     */
     if (gen_instr_next_ifun () != -1)
-	ifun = gen_instr_next_ifun ();
+	if_id_next->ifun = gen_instr_next_ifun ();
     else{
     fetch_ok = get_byte_val(mem, valp, &instr);
-	fectch_ok=TRUE;
+	fetch_ok=TRUE;
     if (fetch_ok) {
 	if_id_next->icode = GET_ICODE(instr);
 	if_id_next->ifun = GET_FUN(instr);
