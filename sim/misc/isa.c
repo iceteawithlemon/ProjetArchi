@@ -86,6 +86,7 @@ instr_t instruction_set[] =
     /* this is just a hack to make the I_POP2 code have an associated name */
     {"lods",   HPACK(I_LSM, 0) , 0, NO_ARG, 0, 0, NO_ARG, 0, 0 },
     {"stos",   HPACK(I_LSM, 1) , 0, NO_ARG, 0, 0, NO_ARG, 0, 0 },
+    {"movs", HPACK(I_LSM, 2), 0, NO_ARG, 0, 0, NO_ARG, 0, 0},
     /* JB ajout 'jreg' et 'jmem' */
     {"jreg",   HPACK(I_JREG, 0) , 2, R_ARG, 1, 1, NO_ARG, 0, 0 },
     {"jmem",   HPACK(I_JMEM, 0), 6, M_ARG, 1, 0, NO_ARG, 0, 0 },

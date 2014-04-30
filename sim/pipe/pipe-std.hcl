@@ -39,6 +39,7 @@ intsig JREG	'I_JREG'
 intsig LEAVE	'I_LEAVE'
 intsig LODS 'I_LSM'
 intsig STOS 'I_LSM'
+intsig MOVS 'I_LSM'
 
 ##### Symbolic representation of Y86 Registers referenced explicitly #####
 intsig RESP     'REG_ESP'    	# Stack Pointer
@@ -141,7 +142,12 @@ bool instr_valid = f_icode in
 	{ NOP, HALT, RRMOVL, IRMOVL, RMMOVL, MRMOVL,
 	       OPL, IOPL, JXX, CALL, RET, PUSHL, POPL, JREG, JMEM , LEAVE, LODS, STOS };
 	
-int instr_next_ifun = [1 : -1;];
+int instr_next_ifun = [
+f_icode == LSM && f_ifun == 2 : 0;
+f_icode == LSM && f_ifun == 0 : 1;
+#D_icode == LSM && D_ifun == 2 : 1;
+1 : -1; 
+];
 
 # Predict next value of PC
 int new_F_predPC = [
